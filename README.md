@@ -18,6 +18,7 @@ graph TD;
     F --> H[Streamlit UI];
     G --> H;
     H -->|User Input| I((Real-Time Dashboard));
+```
 
 🌱 **I’m currently learning:**
 * Intermediate Python for Data Analysis
