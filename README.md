@@ -4,6 +4,21 @@
 * **Data Science Internship @ Thrive Africa:** Collaborated on [a ride-share demand analysis project](https://github.com/data-analytics-internship-2026/project-4-team-2).
 * **Predictive Modeling:** Engineered time and payment features to build a Random Forest Regressor for exact fare prediction (MAE: $2.78) and a Random Forest Classifier for tip prediction (Accuracy: 94%).
 
+## 🏗️ System Architecture
+
+```mermaid
+graph TD;
+    A[Raw Chicago Taxi Data] --> B(Pandas Data Engineering);
+    B -->|Time/Day Extraction| C{Feature Matrix};
+    B -->|Payment Encoding| C;
+    C --> D[Random Forest Regressor];
+    C --> E[Random Forest Classifier];
+    D -->|Joblib Serialization| F(fare_predictor.pkl);
+    E -->|Joblib Serialization| G(tip_predictor.pkl);
+    F --> H[Streamlit UI];
+    G --> H;
+    H -->|User Input| I((Real-Time Dashboard));
+
 🌱 **I’m currently learning:**
 * Intermediate Python for Data Analysis
 * SQL and Git/GitHub workflows
