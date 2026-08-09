@@ -1,3 +1,4 @@
+from pathlib import Path
 import streamlit as st
 import joblib
 import time
@@ -14,14 +15,21 @@ st.set_page_config(
 )
 
 # 2. Model Loading
+BASE_DIR = Path(__file__).resolve().parent
+
 @st.cache_resource
 def load_models():
-    return joblib.load('tip_predictor.pkl'), joblib.load('fare_predictor.pkl')
+    tip_path = BASE_DIR / 'tip_predictor.pkl'
+    fare_path = BASE_DIR / 'fare_predictor.pkl'
+    if not tip_path.exists() or not fare_path.exists():
+        raise FileNotFoundError("Model files not found in the .streamlit folder.")
+    return joblib.load(tip_path), joblib.load(fare_path)
 
 try:
     tip_model, fare_model = load_models()
 except Exception as e:
-    st.error("Model load failure. Ensure .pkl files are present.")
+    st.error(f"Model load failure: {e}")
+    st.stop()
 
 # 3. Enterprise CSS (Radial Glows, Material Icons, Glass Panels)
 st.markdown("""
