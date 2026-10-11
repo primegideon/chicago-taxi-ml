@@ -60,11 +60,5 @@ graph TD;
     H -->|User Input| I((Real-Time Dashboard));
 ```
 
-🌱 **I’m currently learning:**
-* Intermediate Python for Data Analysis
-* SQL and Git/GitHub workflows
-* Pursuing Data Analytics Professional Certificates
 
-🛠️ **Tech Stack & Tools:**
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![SQL](https://img.shields.io/badge/sql-%23336791.svg?style=for-the-badge&logo=sqlite&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) 
