@@ -1,5 +1,5 @@
----8. CTE: Trips classified as short/medium/long
---Common Table Expressions (CTEs) keep the logic separated. The top half categorizes the data, and the bottom half aggregates it.
+-- Query 8: Trip classification and revenue analysis via Common Table Expression (CTE)
+-- Categorizes trips into discrete distance classifications and calculates aggregated revenue and gratuity metrics.
 WITH TripClassifications AS (
   SELECT
     CASE

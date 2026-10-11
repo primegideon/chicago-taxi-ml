@@ -1,3 +1,9 @@
+"""
+Interactive Machine Learning Inference Engine
+
+Serves real-time predictions for Chicago taxi trip fares and gratuity likelihoods
+using serialized Scikit-Learn Random Forest models.
+"""
 from pathlib import Path
 import streamlit as st
 import joblib
@@ -170,28 +176,29 @@ with col2:
         
         if predict_clicked:
             with st.spinner("Processing telemetry..."):
-                time.sleep(0.6) # Professional delay
+                time.sleep(0.6)  # Telemetry latency simulation
                 
-                # Predictions
+                # Model inference: Fare regression
                 fare_features = [[miles, seconds, hour, day]]
                 predicted_fare = fare_model.predict(fare_features)[0]
                 
                 is_credit = 1 if payment_type == "Credit Card" else 0
                 tip_features = [[miles, seconds, hour, day, is_credit]]
                 
+                # Model inference: Gratuity classification
                 try:
                     tip_prob = tip_model.predict_proba(tip_features)[0][1] * 100
-                except:
+                except Exception:
                     predicted_tip = tip_model.predict(tip_features)[0]
                     tip_prob = 92.5 if predicted_tip == 1 else 3.2
                 
-                # Render Clean Output
+                # Render inference results
                 st.markdown(f"""
                 <div class="output-label">Predicted Base Fare</div>
                 <div class="output-value">${predicted_fare:.2f}</div>
                 """, unsafe_allow_html=True)
                 
-                # Precision Gauge Chart
+                # Render gratuity probability gauge
                 fig = go.Figure(go.Indicator(
                     mode = "gauge+number",
                     value = tip_prob,

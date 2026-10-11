@@ -1,5 +1,5 @@
----7. Month-over-month trip volume change
---The LAG() window function. It looks at the previous row (last month) and subtracts it from the current row to find the precise delta.
+-- Query 7: Month-over-month (MoM) trip volume variation using the LAG window function
+-- Evaluates sequential monthly volume trends and computes percentage change across periods.
 WITH MonthlyTrips AS (
   SELECT
     EXTRACT(MONTH FROM trip_start_timestamp) AS month_num,

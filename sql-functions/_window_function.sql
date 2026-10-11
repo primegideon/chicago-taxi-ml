@@ -1,5 +1,5 @@
----6. Peak hour revenue ranking
----uses a subquery to first calculate the revenue per hour, and then the RANK() window function to order them from most to least profitable system-wide.
+-- Query 6: Peak hourly revenue ranking using the RANK window function
+-- Aggregates hourly revenue in an inner subquery and assigns an ordinal rank based on gross earnings.
 SELECT
   hour_of_day,
   total_revenue,
@@ -13,5 +13,3 @@ FROM (
   GROUP BY hour_of_day
 )
 ORDER BY revenue_rank;
-
----

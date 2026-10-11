@@ -2,7 +2,7 @@
 
 This document tracks active bugs, resolved engineering issues, and system limitations for the Streamlit ML Dashboard.
 
-## 🔴 Active Issues / Limitations
+## Active Issues and Limitations
 
 * **Model File Size Limits (GitHub)**
   * **Description:** The `fare_predictor.pkl` and `tip_predictor.pkl` files are ~54.5 MB. While this is under GitHub's 100 MB hard limit, it triggers a `GH001` Large File Warning during pushes. 
@@ -11,7 +11,7 @@ This document tracks active bugs, resolved engineering issues, and system limita
   * **Description:** The application currently runs exclusively on a local Streamlit server. 
   * **Next Steps:** Requires containerization (Docker) or cloud hosting (AWS App Runner / Streamlit Community Cloud) for public web access.
 
-## 🟢 Resolved Issues
+## Resolved Issues
 
 * **Streamlit FileNotFoundError on `.pkl` Loading**
   * **Description:** During initial Streamlit deployment, the app crashed with `FileNotFoundError: [Errno 2] No such file or directory` when attempting to load the models via Joblib.

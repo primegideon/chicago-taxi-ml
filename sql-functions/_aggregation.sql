@@ -1,6 +1,5 @@
----1. Trip count and total revenue by hour of day
---- Use EXTRACT(HOUR...) and round the revenue to two decimal places for financial exactness.
----
+-- Query 1: Trip volume and aggregate revenue by hour of day
+-- Extracts the hour component from the trip start timestamp and aggregates total revenue.
 SELECT
   EXTRACT(HOUR FROM trip_start_timestamp) AS hour_of_day,
   COUNT(unique_key) AS trip_count,
@@ -9,10 +8,9 @@ FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
 WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2023
 GROUP BY hour_of_day
 ORDER BY hour_of_day;
----
----2. Trip count by day of week
----EXTRACT(DAYOFWEEK...) returns an integer where 1 is Sunday and 7 is Saturday.
 
+-- Query 2: Trip volume distribution by day of week
+-- EXTRACT(DAYOFWEEK) returns integers 1 (Sunday) through 7 (Saturday).
 SELECT
   EXTRACT(DAYOFWEEK FROM trip_start_timestamp) AS day_of_week_num,
   COUNT(unique_key) AS trip_count
@@ -21,8 +19,8 @@ WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2023
 GROUP BY day_of_week_num
 ORDER BY day_of_week_num;
 
----4. Top 10 taxi companies by trip count and average fare
----group by the company, rank them by volume, and cap it at 10. also filter out null company names to keep the data audit clean.
+-- Query 4: Top 10 taxi companies by trip volume and average fare
+-- Aggregates volume and average fare per operator, filtering null company records.
 SELECT
   company,
   COUNT(unique_key) AS trip_count,

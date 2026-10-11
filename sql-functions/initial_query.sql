@@ -1,6 +1,7 @@
---- Purpose: Initial Data Validation for 2023-01
+-- Query: Initial data schema and volume validation
+-- Retrieves a representative 1,000-record sample from January 2023 for schema inspection.
 SELECT 
-trip_start_timestamp,
+    trip_start_timestamp,
     fare,
     tips,
     trip_total,

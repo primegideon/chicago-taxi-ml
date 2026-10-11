@@ -1,3 +1,10 @@
+"""
+Application Entry Point
+
+Delegates execution to the Streamlit analytics application located in .streamlit/app.py.
+Enables launching the interface directly via:
+    streamlit run app.py
+"""
 from pathlib import Path
 import runpy
 
