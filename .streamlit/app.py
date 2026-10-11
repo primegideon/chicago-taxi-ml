@@ -8,7 +8,7 @@ from pathlib import Path
 import streamlit as st
 import joblib
 import time
-import plotly.graph_objects as go
+import textwrap
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -109,7 +109,7 @@ st.markdown("""
         font-weight: 600;
     }
 
-    /* Frosted Glass Cards with Vibrant Subtle Borders */
+    /* Frosted Glass Cards with Subtle Borders */
     div[data-testid="column"] > div {
         background: rgba(13, 21, 39, 0.85);
         border: 1px solid rgba(56, 189, 248, 0.2);
@@ -274,10 +274,110 @@ st.markdown("""
         box-shadow: 0 0 8px #34d399;
     }
 
+    /* Gratuity Confidence Meter Card */
+    .gratuity-card {
+        background: rgba(11, 17, 32, 0.85);
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-top: 10px;
+        margin-bottom: 14px;
+    }
+
+    .gratuity-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .gratuity-tier-tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .gratuity-tier-tag.high {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #34d399;
+    }
+
+    .gratuity-tier-tag.moderate {
+        background: rgba(14, 165, 233, 0.15);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        color: #38bdf8;
+    }
+
+    .gratuity-tier-tag.low {
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        color: #fbbf24;
+    }
+
+    .gratuity-score-large {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1;
+    }
+
+    .meter-track-container {
+        width: 100%;
+        height: 12px;
+        background: #080e1c;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 6px;
+        margin-bottom: 12px;
+        position: relative;
+    }
+
+    .meter-fill-bar {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.5s ease-in-out;
+    }
+
+    .meter-tiers-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: #64748b;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .meter-tier-cell {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .meter-tier-cell.active {
+        color: #f8fafc;
+        font-weight: 700;
+    }
+
+    .tier-indicator-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
     .insight-card {
         border-radius: 8px;
         padding: 12px 14px;
-        margin-top: 14px;
+        margin-top: 10px;
         display: flex;
         align-items: flex-start;
         gap: 10px;
@@ -437,21 +537,21 @@ with col2:
                 price_per_mile = predicted_fare / miles if miles > 0 else 0
                 est_speed_mph = (miles / (seconds / 3600)) if seconds > 0 else 0
 
-                st.markdown("""
+                st.markdown(textwrap.dedent("""
                 <div class="status-badge online">
                     <div class="status-dot"></div>
                     INFERENCE EXECUTED SUCCESSFULLY
                 </div>
-                """, unsafe_allow_html=True)
+                """).strip(), unsafe_allow_html=True)
 
                 # Base Fare Display
-                st.markdown(f"""
+                st.markdown(textwrap.dedent(f"""
                 <div class="output-label">Predicted Trip Fare</div>
                 <div class="output-value">${predicted_fare:.2f}</div>
-                """, unsafe_allow_html=True)
+                """).strip(), unsafe_allow_html=True)
 
                 # Telemetry Sub-Metrics
-                st.markdown(f"""
+                st.markdown(textwrap.dedent(f"""
                 <div class="telemetry-row">
                     <div class="telemetry-pill">
                         <div class="telemetry-pill-label">Est. Unit Rate</div>
@@ -466,116 +566,117 @@ with col2:
                         <div class="telemetry-pill-value">Random Forest</div>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """).strip(), unsafe_allow_html=True)
 
-                # Gratuity Probability Gauge
-                st.markdown("<div class='output-label'>Probabilistic Gratuity Assessment</div>", unsafe_allow_html=True)
-                
-                # Dynamic gauge bar color according to prediction state
-                if payment_type == "Cash" or tip_prob < 15:
-                    bar_color = "#f59e0b" if payment_type == "Cash" else "#64748b"
+                # Gratuity Tier Classification and Styling
+                if payment_type == "Cash" or tip_prob < 20:
+                    tier_label = "Unlikely / Minimal"
+                    tier_class = "low"
+                    tier_color = "#fbbf24"
+                    fill_gradient = "linear-gradient(90deg, #d97706 0%, #f59e0b 100%)"
+                    glow_shadow = "0 0 14px rgba(245, 158, 11, 0.45)"
+                    active_idx = 0
                 elif tip_prob >= 65:
-                    bar_color = "#10b981"
+                    tier_label = "High Likelihood"
+                    tier_class = "high"
+                    tier_color = "#34d399"
+                    fill_gradient = "linear-gradient(90deg, #059669 0%, #10b981 70%, #34d399 100%)"
+                    glow_shadow = "0 0 16px rgba(16, 185, 129, 0.55)"
+                    active_idx = 2
                 else:
-                    bar_color = "#0284c7"
+                    tier_label = "Moderate Likelihood"
+                    tier_class = "moderate"
+                    tier_color = "#38bdf8"
+                    fill_gradient = "linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)"
+                    glow_shadow = "0 0 14px rgba(56, 189, 248, 0.45)"
+                    active_idx = 1
 
-                fig = go.Figure(go.Indicator(
-                    mode="gauge+number",
-                    value=tip_prob,
-                    number={'suffix': "%", 'font': {'color': '#f8fafc', 'size': 34}},
-                    gauge={
-                        'axis': {
-                            'range': [0, 100], 
-                            'tickwidth': 1, 
-                            'tickcolor': "#475569", 
-                            'visible': True,
-                            'tickmode': 'array',
-                            'tickvals': [0, 25, 50, 75, 100],
-                            'tickfont': {'color': '#94a3b8', 'size': 11}
-                        },
-                        'bar': {'color': bar_color, 'thickness': 0.35},
-                        'bgcolor': "#0b1120",
-                        'borderwidth': 1,
-                        'bordercolor': "#1e293b",
-                        'steps': [
-                            {'range': [0, 100], 'color': 'rgba(15, 23, 42, 0.6)'}
-                        ]
-                    }
-                ))
-                
-                fig.update_layout(
-                    height=160, 
-                    margin=dict(l=10, r=10, t=10, b=10),
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    font={'family': "Inter"}
-                )
-                
-                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+                fill_pct = max(min(tip_prob, 100.0), 3.0)
+
+                # Render HTML without markdown indentation issues
+                html_meter = f"""<div class="output-label">Probabilistic Gratuity Assessment</div>
+<div class="gratuity-card">
+<div class="gratuity-top-row">
+<div class="gratuity-tier-tag {tier_class}">
+<span class="tier-indicator-dot" style="background-color: {tier_color}; box-shadow: 0 0 6px {tier_color};"></span>
+{tier_label}
+</div>
+<div class="gratuity-score-large" style="color: {tier_color};">
+{tip_prob:.1f}<span style="font-size: 16px; font-weight: 500; color: #94a3b8;">%</span>
+</div>
+</div>
+<div class="meter-track-container">
+<div class="meter-fill-bar" style="width: {fill_pct:.1f}%; background: {fill_gradient}; box-shadow: {glow_shadow};"></div>
+</div>
+<div class="meter-tiers-row">
+<span class="meter-tier-cell {'active' if active_idx == 0 else ''}">
+<span style="color: {'#fbbf24' if active_idx == 0 else '#475569'};">●</span> Low (&lt; 30%)
+</span>
+<span class="meter-tier-cell {'active' if active_idx == 1 else ''}">
+<span style="color: {'#38bdf8' if active_idx == 1 else '#475569'};">●</span> Moderate (30–65%)
+</span>
+<span class="meter-tier-cell {'active' if active_idx == 2 else ''}">
+<span style="color: {'#34d399' if active_idx == 2 else '#475569'};">●</span> High (≥ 65%)
+</span>
+</div>
+</div>"""
+
+                st.markdown(html_meter, unsafe_allow_html=True)
 
                 # Behavioral Gratuity Insights
                 if payment_type == "Credit Card" and tip_prob >= 60:
-                    st.markdown("""
-                    <div class="insight-card tip-high">
-                        <span class="material-symbols-outlined" style="color: #34d399; font-size: 18px;">verified</span>
-                        <div><strong>High Gratuity Profile:</strong> Electronic payment method correlates with an elevated tipping frequency in municipal taxi data.</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("""<div class="insight-card tip-high">
+<span class="material-symbols-outlined" style="color: #34d399; font-size: 18px;">verified</span>
+<div><strong>High Gratuity Profile:</strong> Electronic payment method correlates with an elevated tipping frequency in municipal taxi data.</div>
+</div>""", unsafe_allow_html=True)
                 elif payment_type == "Cash":
-                    st.markdown("""
-                    <div class="insight-card tip-low">
-                        <span class="material-symbols-outlined" style="color: #fbbf24; font-size: 18px;">payments</span>
-                        <div><strong>Cash Payment Notice:</strong> Gratuities on cash transactions are rarely captured in registry telemetry or have lower recorded rates.</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("""<div class="insight-card tip-low">
+<span class="material-symbols-outlined" style="color: #fbbf24; font-size: 18px;">payments</span>
+<div><strong>Cash Payment Notice:</strong> Gratuities on cash transactions are rarely captured in registry telemetry or have lower recorded rates.</div>
+</div>""", unsafe_allow_html=True)
                 else:
-                    st.markdown("""
-                    <div class="insight-card tip-low">
-                        <span class="material-symbols-outlined" style="color: #94a3b8; font-size: 18px;">info</span>
-                        <div><strong>Standard Gratuity Profile:</strong> Moderate tip probability influenced by baseline distance and time of day.</div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("""<div class="insight-card tip-low">
+<span class="material-symbols-outlined" style="color: #94a3b8; font-size: 18px;">info</span>
+<div><strong>Standard Gratuity Profile:</strong> Moderate tip probability influenced by baseline distance and time of day.</div>
+</div>""", unsafe_allow_html=True)
 
         else:
             # Clean Idle State: Model Telemetry and System Specifications
-            st.markdown("""
-            <div class="status-badge online">
-                <div class="status-dot"></div>
-                SYSTEM READY - AWAITING PARAMETERS
-            </div>
-            
-            <div style="font-size: 13px; color: #94a3b8; margin-bottom: 22px; line-height: 1.6;">
-                Configure the route variables on the left panel or choose one of the predefined trip presets, then click <strong>Execute Model Inference</strong> to generate real-time fare estimations and gratuity analytics.
-            </div>
-
-            <div class="output-label">SYSTEM & BENCHMARK TELEMETRY</div>
-            <div class="telemetry-row">
-                <div class="telemetry-pill">
-                    <div class="telemetry-pill-label">Inference Engine</div>
-                    <div class="telemetry-pill-value">Dual RF</div>
-                </div>
-                <div class="telemetry-pill">
-                    <div class="telemetry-pill-label">Target Metric</div>
-                    <div class="telemetry-pill-value">MAE $2.78</div>
-                </div>
-                <div class="telemetry-pill">
-                    <div class="telemetry-pill-label">Tip Accuracy</div>
-                    <div class="telemetry-pill-value">94.0%</div>
-                </div>
-            </div>
-
-            <div class="output-label" style="margin-top: 18px;">HISTORICAL CITY BENCHMARKS</div>
-            <div style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(56, 189, 248, 0.16); border-radius: 10px; padding: 14px 18px;">
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.08); font-size: 13px;">
-                    <span style="color: #94a3b8;">Average Chicago Trip Fare</span>
-                    <span style="color: #f8fafc; font-weight: 600;">$14.85</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.08); font-size: 13px;">
-                    <span style="color: #94a3b8;">Credit Card Tipping Frequency</span>
-                    <span style="color: #38bdf8; font-weight: 600;">76.4%</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;">
-                    <span style="color: #94a3b8;">Average Urban Speed</span>
-                    <span style="color: #f8fafc; font-weight: 600;">18.2 mph</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+            idle_html = """<div class="status-badge online">
+<div class="status-dot"></div>
+SYSTEM READY - AWAITING PARAMETERS
+</div>
+<div style="font-size: 13px; color: #94a3b8; margin-bottom: 22px; line-height: 1.6;">
+Configure the route variables on the left panel or choose one of the predefined trip presets, then click <strong>Execute Model Inference</strong> to generate real-time fare estimations and gratuity analytics.
+</div>
+<div class="output-label">SYSTEM & BENCHMARK TELEMETRY</div>
+<div class="telemetry-row">
+<div class="telemetry-pill">
+<div class="telemetry-pill-label">Inference Engine</div>
+<div class="telemetry-pill-value">Dual RF</div>
+</div>
+<div class="telemetry-pill">
+<div class="telemetry-pill-label">Target Metric</div>
+<div class="telemetry-pill-value">MAE $2.78</div>
+</div>
+<div class="telemetry-pill">
+<div class="telemetry-pill-label">Tip Accuracy</div>
+<div class="telemetry-pill-value">94.0%</div>
+</div>
+</div>
+<div class="output-label" style="margin-top: 18px;">HISTORICAL CITY BENCHMARKS</div>
+<div style="background: rgba(11, 17, 32, 0.7); border: 1px solid rgba(56, 189, 248, 0.16); border-radius: 10px; padding: 14px 18px;">
+<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.08); font-size: 13px;">
+<span style="color: #94a3b8;">Average Chicago Trip Fare</span>
+<span style="color: #f8fafc; font-weight: 600;">$14.85</span>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.08); font-size: 13px;">
+<span style="color: #94a3b8;">Credit Card Tipping Frequency</span>
+<span style="color: #38bdf8; font-weight: 600;">76.4%</span>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px;">
+<span style="color: #94a3b8;">Average Urban Speed</span>
+<span style="color: #f8fafc; font-weight: 600;">18.2 mph</span>
+</div>
+</div>"""
+            st.markdown(idle_html, unsafe_allow_html=True)
