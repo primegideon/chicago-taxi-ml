@@ -1,5 +1,5 @@
-# Throwback on Internship Program
-## Thrive Africa Internship: Ride-Share Demand & Predictive ML Analysis
+# Chicago Transit Demand Analysis & Predictive Machine Learning Platform
+## Ride-Share Demand Optimization, BigQuery Engineering & Predictive ML Inference
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Google BigQuery](https://img.shields.io/badge/Google_BigQuery-669DF6?style=for-the-badge&logo=googlecloud&logoColor=white)](https://cloud.google.com/bigquery)
@@ -7,15 +7,15 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Looker Studio](https://img.shields.io/badge/Looker_Studio-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://datastudio.google.com/reporting/87045563-9634-4aae-b4be-f237db575605)
 
-> Documentation for the end-to-end machine learning inference engine, data engineering pipeline, and business analytics system developed during the Thrive Africa Data Analytics & Data Science Internship.
+> Comprehensive technical documentation for the end-to-end machine learning inference engine, data engineering pipeline, and business analytics platform developed during the Thrive Africa Data Analytics & Data Science program.
 
 ---
 
 ## Executive Summary
 
-This repository contains the complete technical deliverables, exploratory data analysis (EDA), predictive models, and deployment artifacts created during the **Thrive Africa Data Science Internship**.
+This repository contains the complete technical deliverables, exploratory data analysis (EDA), predictive models, and deployment artifacts for municipal ride-share demand optimization.
 
-Working as part of **Project 4 (Team 2)** ([Team Repository](https://github.com/data-analytics-internship-2026/project-4-team-2)), we addressed fare volatility, gratuity dynamics, and fleet operational efficiency using Chicago Transit data (`bigquery-public-data.chicago_taxi_trips`). This project covers the full analytics lifecycle: from BigQuery SQL warehousing and feature engineering to dual Random Forest model inference and an interactive Streamlit operational cockpit.
+Developed as part of **Project 4 (Team 2)** ([Team Repository](https://github.com/data-analytics-internship-2026/project-4-team-2)), this project addresses municipal fare volatility, gratuity dynamics, and fleet operational efficiency using Chicago Transit data (`bigquery-public-data.chicago_taxi_trips`). This project covers the full analytics lifecycle: from BigQuery SQL warehousing and feature engineering to dual Random Forest model inference and an interactive Streamlit operational cockpit.
 
 ---
 
@@ -23,7 +23,7 @@ Working as part of **Project 4 (Team 2)** ([Team Repository](https://github.com/
 
 The Streamlit deployment provides real-time inference for both continuous fare regression and probabilistic tip classification, styled with a modern dark theme and radial glow aesthetics.
 
-![Dashboard Preview](.streamlit/dashboard.png)
+![Dashboard Preview](assets/dashboard_preview.png)
 
 > **BI Dashboard:** The live Looker Studio Executive Report is accessible at [Looker Studio Report](https://datastudio.google.com/reporting/87045563-9634-4aae-b4be-f237db575605).
 
@@ -60,11 +60,11 @@ flowchart TD
 
 | Deliverable | Status | Component | Details |
 | :--- | :---: | :--- | :--- |
-| **SQL Data Extraction** | Completed | `sql-functions/` | Optimized BigQuery queries using CTEs, distance buckets, and tip rate aggregations. |
-| **EDA Research** | Completed | `eda-notebooks/` | In-depth analysis of 2023 seasonal demand curves, payment patterns, and outliers. |
-| **ML Training (Regression)** | Completed | `ml-notebooks/` | Random Forest Regressor predicting exact trip fare (**MAE: $2.78**). |
-| **ML Training (Classification)**| Completed | `ml-notebooks/` | Random Forest Classifier predicting tip likelihood (**94% Accuracy**). |
-| **Streamlit Web Application** | Completed | `app.py` & `.streamlit/` | Interactive prediction engine featuring instant multi-model inference. |
+| **SQL Data Extraction** | Completed | `sql/` | Optimized BigQuery queries using CTEs, distance buckets, and tip rate aggregations. |
+| **EDA Research** | Completed | `notebooks/` | In-depth analysis of 2023 seasonal demand curves, payment patterns, and outliers. |
+| **ML Training (Regression)** | Completed | `notebooks/` | Random Forest Regressor predicting exact trip fare (**MAE: $2.78**). |
+| **ML Training (Classification)**| Completed | `notebooks/` | Random Forest Classifier predicting tip likelihood (**94% Accuracy**). |
+| **Streamlit Web Application** | Completed | `app.py` & `models/` | Interactive prediction engine featuring instant multi-model inference. |
 | **Executive Reports & Decks** | Completed | `reports/` & `presentations/` | Comprehensive stakeholder analytical report and presentation deck. |
 
 ---
@@ -82,7 +82,7 @@ Dual machine learning models were developed to capture non-linear relationships,
 
 ## Key Architectural & Tooling Decisions
 
-* **Google BigQuery**: Utilized for scalable querying of millions of trip records using partitioned filters and window functions (`_cte.sql`, `_advanced.sql`).
+* **Google BigQuery**: Utilized for scalable querying of millions of trip records using partitioned filters and window functions (`04_distance_buckets_and_tips.sql`, `07_trip_classification_cte.sql`).
 * **Scikit-Learn (Random Forest)**: Chosen over linear baselines to model complex interactions between pickup location, time of day, and trip distance without severe overfitting.
 * **Joblib Serialization**: Selected over standard `pickle` for significantly faster serialization and deserialization of ensemble tree structures.
 * **Streamlit**: Selected for rapid deployment of an interactive analytics interface, bridging data science with operational tooling without requiring a separate JavaScript stack.
@@ -114,7 +114,7 @@ Dual machine learning models were developed to capture non-linear relationships,
 
 3. **Install the required dependencies:**
    ```bash
-   pip install streamlit joblib plotly scikit-learn pandas
+   pip install -r requirements.txt
    ```
 
 4. **Launch the Streamlit Analytics Application:**
@@ -130,20 +130,36 @@ Dual machine learning models were developed to capture non-linear relationships,
 ```text
 chicago-taxi-ml/
 ├── .streamlit/
-│   ├── app.py             # Streamlit application UI and logic
-│   ├── config.toml        # Theme configuration
-│   ├── dashboard.png      # Application interface preview
-│   ├── fare_predictor.pkl # Serialized Random Forest Regressor
-│   └── tip_predictor.pkl  # Serialized Random Forest Classifier
-├── data/                  # Sample and processed dataset references
-├── eda-notebooks/         # Exploratory data analysis Jupyter notebooks
-├── ml-notebooks/          # Model engineering and training notebooks
-├── presentations/         # Stakeholder presentation deck
-├── reports/               # Analytical reports and dashboard documentation
-├── sql-functions/         # BigQuery SQL CTEs and analytics queries
-├── app.py                 # Application launcher
-├── known_issues.md        # Technical tracking and deployment notes
-└── README.md              # Master project documentation
+│   └── config.toml                  # Streamlit theme & UI configuration
+├── assets/
+│   └── dashboard_preview.png        # Production interface preview
+├── data/
+│   └── data_dictionary.md           # Dataset schema & feature definitions
+├── models/
+│   ├── fare_predictor.pkl           # Serialized Random Forest Regressor
+│   └── tip_predictor.pkl            # Serialized Random Forest Classifier
+├── notebooks/
+│   ├── 01_data_extraction_inspection.ipynb # Initial BigQuery schema validation
+│   ├── 02_exploratory_demand_analysis.ipynb # 2023 demand & pricing EDA
+│   └── 03_fare_and_tip_ml_pipeline.ipynb   # Dual ML modeling & evaluation
+├── presentations/
+│   ├── README.md                    # Presentation deck overview
+│   └── chicago_taxi_optimization_strategy.pdf # Executive stakeholder presentation
+├── reports/
+│   ├── analytical_report.pdf        # In-depth technical report
+│   └── dashboard_specification.md   # Looker Studio deployment specs
+├── sql/
+│   ├── 01_initial_schema_validation.sql # Schema exploration query
+│   ├── 02_stratified_eda_sample.sql     # Stratified BigQuery sampling
+│   ├── 03_temporal_aggregations.sql     # Hourly & weekly volume aggregations
+│   ├── 04_distance_buckets_and_tips.sql # Mileage buckets & tip dynamics
+│   ├── 05_peak_hourly_revenue_rank.sql  # RANK window function analysis
+│   ├── 06_time_series_mom_lag.sql       # LAG window month-over-month trends
+│   └── 07_trip_classification_cte.sql   # Distance classification CTE
+├── app.py                           # Core Streamlit application entry point
+├── known_issues.md                  # System constraints & RCA logs
+├── requirements.txt                 # Pinned project dependencies
+└── README.md                        # Master repository documentation
 ```
 
 ---
@@ -154,13 +170,14 @@ For details regarding Git LFS file handling and cloud hosting next steps, refer 
 
 ---
 
-## Continuous Learning & Growth
+## Technical Competencies & Engineering Scope
 
-Through the **Thrive Africa Internship Program**, key competencies mastered include:
-* End-to-end data pipelines from cloud data warehousing (BigQuery) to production ML serving.
-* Advanced feature engineering for temporal transit patterns.
-* Translating technical machine learning outcomes into executive business recommendations.
-* Collaborative Git/GitHub workflows within cross-functional teams.
+Key technical competencies and engineering practices demonstrated across this project include:
+* **Cloud Data Warehousing & SQL Optimization:** Advanced partitioning, window functions, and Common Table Expressions (CTEs) within Google BigQuery.
+* **Feature Engineering & Preprocessing:** Extraction of cyclic and categorical temporal features for urban transit modeling.
+* **Supervised Machine Learning:** Training, hyperparameter configuration, and validation of ensemble regression and classification models using Scikit-Learn.
+* **Model Deployment & Operationalization:** Production-grade model serialization via Joblib and low-latency interactive serving via Streamlit.
+* **Executive Communication:** Synthesis of complex quantitative models into stakeholder dashboards and actionable business strategies.
 
 ---
 
